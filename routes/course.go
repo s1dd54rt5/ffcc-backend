@@ -1,27 +1,28 @@
 package routes
 
 import (
-	"context"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
+	"os"
 
-	"github.com/44t4nk1/ffcc-backend/db"
 	"github.com/44t4nk1/ffcc-backend/models"
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func GetCourses(c *gin.Context) {
-	var ctx context.Context
-	var courseList models.CourseList
-	collection := db.GetDbCollection("courses-list")
-	err := collection.FindOne(ctx, bson.D{{}}).Decode(&courseList)
+	var courses models.CourseList
+	jsonFile, err := os.Open("./csv/courses-list.json")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": true, "message": "No courses available"})
-		return
+		fmt.Println(err)
 	}
+	defer jsonFile.Close()
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	json.Unmarshal(byteValue, &courses)
 	c.JSON(http.StatusOK, gin.H{
 		"error":   false,
 		"message": "Data sent succesfully",
-		"courses": courseList.Courses,
+		"courses": courses.Courses,
 	})
 }

@@ -12,7 +12,9 @@ import (
 	"github.com/44t4nk1/ffcc-backend/db"
 	"github.com/44t4nk1/ffcc-backend/models"
 	"github.com/gin-gonic/gin"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
@@ -56,4 +58,41 @@ func LoadCsv(c *gin.Context) {
 		}
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Successfully added data"})
+}
+
+func CourseList(c *gin.Context) {
+	var ctx context.Context
+	var courses []models.CourseItem
+	findOptions := options.Find()
+	findOptions.SetLimit(6000)
+	collection := db.GetDbCollection("courses")
+	cur, err := collection.Find(ctx, bson.D{{}}, findOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for cur.Next(ctx) {
+		var elem models.CourseItem
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		courses = append(courses, elem)
+	}
+	listCollection := db.GetDbCollection("courses-list")
+	listCourses := models.CourseList{
+		ID:      primitive.NewObjectID(),
+		Courses: courses,
+	}
+	_, err = listCollection.InsertOne(ctx, listCourses)
+	if err != nil {
+		log.Fatal(err)
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "Data added succesfully",
+	})
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+	cur.Close(ctx)
 }

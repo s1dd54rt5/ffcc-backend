@@ -6,4 +6,6 @@ import (
 
 func InitRoutes(router *gin.Engine) {
 	router.GET("/load/csv", LoadCsv)
+	router.GET("/load/courses", CourseList)
+	router.GET("/get/courses", GetCourses)
 }

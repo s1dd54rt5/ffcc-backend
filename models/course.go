@@ -15,3 +15,14 @@ type Course struct {
 	Title   string             `json:"title" bson:"title"`
 	Type    string             `json:"type" bson:"type"`
 }
+
+type CourseItem struct {
+	ID    primitive.ObjectID `json:"_id" bson:"_id"`
+	Code  string             `json:"code" bson:"code"`
+	Title string             `json:"title" bson:"title"`
+}
+
+type CourseList struct {
+	ID      primitive.ObjectID `json:"_id" bson:"_id"`
+	Courses []CourseItem       `json:"courses" bson:"courses"`
+}

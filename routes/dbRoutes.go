@@ -77,6 +77,7 @@ func CourseList(c *gin.Context) {
 			log.Fatal(err)
 		}
 		if !contains(&courses, &elem) {
+			elem.ID = primitive.NewObjectID()
 			courses = append(courses, elem)
 		}
 	}

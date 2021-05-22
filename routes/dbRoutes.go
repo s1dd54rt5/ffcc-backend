@@ -76,7 +76,9 @@ func CourseList(c *gin.Context) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		courses = append(courses, elem)
+		if !contains(&courses, &elem) {
+			courses = append(courses, elem)
+		}
 	}
 	listCollection := db.GetDbCollection("courses-list")
 	listCourses := models.CourseList{
@@ -95,4 +97,15 @@ func CourseList(c *gin.Context) {
 		log.Fatal(err)
 	}
 	cur.Close(ctx)
+}
+
+func contains(courses *[]models.CourseItem, course *models.CourseItem) bool {
+	flag := false
+	for _, elem := range *courses {
+		if elem.Code == course.Code {
+			flag = true
+			break
+		}
+	}
+	return flag
 }

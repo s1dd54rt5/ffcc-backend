@@ -17,9 +17,10 @@ type Course struct {
 }
 
 type CourseItem struct {
-	ID    primitive.ObjectID `json:"_id" bson:"_id"`
-	Code  string             `json:"code" bson:"code"`
-	Title string             `json:"title" bson:"title"`
+	ID      primitive.ObjectID `json:"_id" bson:"_id"`
+	Code    string             `json:"code" bson:"code"`
+	Title   string             `json:"title" bson:"title"`
+	Credits int                `json:"credits" bson:"credits"`
 }
 
 type CourseList struct {

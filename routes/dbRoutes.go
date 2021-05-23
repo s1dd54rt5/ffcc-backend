@@ -105,7 +105,7 @@ func CourseList(c *gin.Context) {
 func contains(courses *[]models.CourseItem, course *models.CourseItem) bool {
 	flag := false
 	for _, elem := range *courses {
-		if elem.Code == course.Code {
+		if elem.Code == course.Code && elem.Type == course.Type {
 			flag = true
 			break
 		}

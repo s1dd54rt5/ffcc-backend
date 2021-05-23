@@ -23,6 +23,7 @@ type CourseItem struct {
 	Code    string             `json:"code" bson:"code"`
 	Title   string             `json:"title" bson:"title"`
 	Credits int                `json:"credits" bson:"credits"`
+	Type    string             `json:"type" bson:"type"`
 }
 
 type CourseList struct {

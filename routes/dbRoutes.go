@@ -51,6 +51,8 @@ func LoadCsv(c *gin.Context) {
 			Slot:    record[5],
 			Title:   record[6],
 			Type:    record[7],
+			Rating:  0.0,
+			Reviews: 0,
 		}
 		_, err = collection.InsertOne(ctx, course)
 		if err != nil {

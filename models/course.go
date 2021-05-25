@@ -14,8 +14,6 @@ type Course struct {
 	Slot    string             `json:"slot" bson:"slot"`
 	Title   string             `json:"title" bson:"title"`
 	Type    string             `json:"type" bson:"type"`
-	Rating  float64            `json:"rating" bson:"rating"`
-	Reviews int                `json:"reviews" bson:"reviews"`
 }
 
 type CourseItem struct {

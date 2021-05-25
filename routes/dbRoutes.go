@@ -100,6 +100,59 @@ func CourseList(c *gin.Context) {
 	cur.Close(ctx)
 }
 
+func FacultyList(c *gin.Context) {
+	var ctx context.Context
+	var faculties []models.Faculty
+	findOptions := options.Find()
+	findOptions.SetLimit(6000)
+	collection := db.GetDbCollection("courses")
+	cur, err := collection.Find(ctx, bson.D{{}}, findOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for cur.Next(ctx) {
+		var elem models.Faculty
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if !containsFaculty(&faculties, &elem) {
+			elem.ID = primitive.NewObjectID()
+			elem.Rating = 0.0
+			elem.Reviews = 0
+			faculties = append(faculties, elem)
+		}
+	}
+	listCollection := db.GetDbCollection("faculty-list")
+	listFaculties := models.FacultyList{
+		ID:          primitive.NewObjectID(),
+		FacultyList: faculties,
+	}
+	_, err = listCollection.InsertOne(ctx, listFaculties)
+	if err != nil {
+		log.Fatal(err)
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "Data added succesfully",
+	})
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+	cur.Close(ctx)
+}
+
+func containsFaculty(faculties *[]models.Faculty, faculty *models.Faculty) bool {
+	flag := false
+	for _, elem := range *faculties {
+		if elem.Name == faculty.Name {
+			flag = true
+			break
+		}
+	}
+	return flag
+}
+
 func contains(courses *[]models.CourseItem, course *models.CourseItem) bool {
 	flag := false
 	for _, elem := range *courses {

@@ -12,8 +12,11 @@ var (
 	router = gin.Default()
 )
 
-func main() {
+func init() {
 	db.InitialiseDb()
 	routes.InitRoutes(router)
+}
+
+func main() {
 	log.Fatal(router.Run(":8080"))
 }

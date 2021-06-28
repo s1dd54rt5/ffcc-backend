@@ -120,6 +120,7 @@ func FacultyList(c *gin.Context) {
 			elem.ID = primitive.NewObjectID()
 			elem.Rating = 0.0
 			elem.Reviews = 0
+			elem.RatedBy = []primitive.ObjectID{}
 			faculties = append(faculties, elem)
 		}
 	}

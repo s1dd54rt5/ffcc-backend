@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/44t4nk1/ffcc-backend/db"
 	"github.com/44t4nk1/ffcc-backend/routes"
@@ -18,5 +19,9 @@ func init() {
 }
 
 func main() {
-	log.Fatal(router.Run(":8080"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	log.Fatal(router.Run(":" + port))
 }

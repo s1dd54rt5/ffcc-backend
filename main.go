@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -21,7 +20,6 @@ func init() {
 
 func main() {
 	port := os.Getenv("PORT")
-	fmt.Println(port)
 	if port == "" {
 		port = "8080"
 	}

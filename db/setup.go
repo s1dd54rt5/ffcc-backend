@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -20,6 +21,7 @@ func GetDbCollection(title string) *mongo.Collection {
 }
 
 func InitialiseDb() {
+	godotenv.Load()
 	dbUrl := os.Getenv("DBURL")
 	clientOptions := options.Client().ApplyURI(dbUrl)
 

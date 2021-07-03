@@ -20,10 +20,6 @@ func GetDbCollection(title string) *mongo.Collection {
 }
 
 func InitialiseDb() {
-	// err := godotenv.Load(".env")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 	dbUrl := os.Getenv("DBURL")
 	clientOptions := options.Client().ApplyURI(dbUrl)
 

@@ -14,3 +14,8 @@ type FacultyList struct {
 	ID          primitive.ObjectID `json:"_id" bson:"_id"`
 	FacultyList []Faculty          `json:"faculty" bson:"faculty"`
 }
+
+type FacultyRating struct {
+	ID     primitive.ObjectID `json:"_id" bson:"_id"`
+	Rating float64            `json:"rating" bson:"rating"`
+}

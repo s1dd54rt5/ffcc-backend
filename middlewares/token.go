@@ -9,13 +9,14 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreateToken(uuid string) (string, error) {
+func CreateToken(id primitive.ObjectID) (string, error) {
 	var err error
 	atClaims := jwt.MapClaims{}
 	atClaims["authorized"] = true
-	atClaims["uuid"] = uuid
+	atClaims["id"] = id
 	atClaims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	godotenv.Load()

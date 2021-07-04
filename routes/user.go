@@ -79,7 +79,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	if comparePasswords(result.Password, []byte(u.Password)) {
-		tokenString := result.ID.String()
+		tokenString := result.ID
 		token, err := middlewares.CreateToken(tokenString)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Error in creating token"})

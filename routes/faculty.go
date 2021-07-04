@@ -87,7 +87,6 @@ func RateFaculty(c *gin.Context, token *jwt.Token) {
 				log.Fatal(err)
 			}
 			c.JSON(http.StatusOK, gin.H{"error": false, "message": "Faculty rated successfully"})
-			c.JSON(http.StatusOK, facultyList)
 		}
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": true, "message": "Incorrect Faculty ID"})

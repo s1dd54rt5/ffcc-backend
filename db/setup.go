@@ -21,11 +21,12 @@ func GetDbCollection(title string) *mongo.Collection {
 }
 
 func InitialiseDb() {
+	var err error
 	godotenv.Load()
 	dbUrl := os.Getenv("DBURL")
 	clientOptions := options.Client().ApplyURI(dbUrl)
 
-	Client, err := mongo.Connect(ctx, clientOptions)
+	Client, err = mongo.Connect(ctx, clientOptions)
 
 	if err != nil {
 		log.Fatal(err)

@@ -74,7 +74,7 @@ func RateFaculty(c *gin.Context, token *jwt.Token) {
 					}
 					facultyList.FacultyList[elem].RatedBy = append(facultyList.FacultyList[elem].RatedBy, objID)
 					facultyList.FacultyList[elem].Reviews = facultyList.FacultyList[elem].Reviews + 1
-					facultyList.FacultyList[elem].Rating = (facultyList.FacultyList[elem].Rating + fac.Rating) / float64(facultyList.FacultyList[elem].Reviews)
+					facultyList.FacultyList[elem].Rating = (facultyList.FacultyList[elem].Rating*float64(facultyList.FacultyList[elem].Reviews-1) + fac.Rating) / float64(facultyList.FacultyList[elem].Reviews)
 					break
 				}
 			}

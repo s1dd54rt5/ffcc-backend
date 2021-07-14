@@ -17,14 +17,6 @@ var (
 
 func init() {
 	db.InitialiseDb()
-	routes.InitRoutes(router)
-}
-
-func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
 	router.Use(cors.Middleware(
 		cors.Config{
 			Origins:         "*",
@@ -35,5 +27,14 @@ func main() {
 			Credentials:     true,
 			ValidateHeaders: false,
 		}))
+	routes.InitRoutes(router)
+}
+
+func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	log.Fatal(router.Run(":" + port))
 }

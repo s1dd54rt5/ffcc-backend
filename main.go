@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/44t4nk1/ffcc-backend/db"
+	"github.com/44t4nk1/ffcc-backend/middlewares"
 	"github.com/44t4nk1/ffcc-backend/routes"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,6 +24,6 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	router.Use(cors.Default())
+	router.Use(middlewares.CORSMiddleware())
 	log.Fatal(router.Run(":" + port))
 }

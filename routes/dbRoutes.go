@@ -60,6 +60,30 @@ func LoadCsv(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Successfully added data"})
 }
 
+func UniqueSlot(c *gin.Context) {
+	var courses []models.Course
+	var slots []string
+	findOptions := options.Find()
+	findOptions.SetLimit(6000)
+	collection := db.GetDbCollection("courses")
+	cur, err := collection.Find(ctx, bson.D{{}}, findOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for cur.Next(ctx) {
+		var elem models.Course
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		if !containsSlot(&courses, &elem) {
+			courses = append(courses, elem)
+			slots = append(slots, elem.Slot)
+		}
+	}
+	c.JSON(http.StatusOK, gin.H{"slots": slots})
+}
+
 func CourseList(c *gin.Context) {
 	var ctx context.Context
 	var courses []models.CourseItem
@@ -158,6 +182,17 @@ func contains(courses *[]models.CourseItem, course *models.CourseItem) bool {
 	flag := false
 	for _, elem := range *courses {
 		if elem.Code == course.Code && elem.Type == course.Type {
+			flag = true
+			break
+		}
+	}
+	return flag
+}
+
+func containsSlot(courses *[]models.Course, course *models.Course) bool {
+	flag := false
+	for _, elem := range *courses {
+		if elem.Slot == course.Slot {
 			flag = true
 			break
 		}

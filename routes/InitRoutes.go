@@ -11,6 +11,7 @@ func InitRoutes(router *gin.Engine) {
 	router.GET("/load/faculty", FacultyList)
 	router.GET("/get/courses", GetCourses)
 	router.GET("/get/faculty", GetFaculty)
+	router.GET("/get/slots", UniqueSlot)
 	router.POST("/user/signup", Signup)
 	router.POST("/user/login", Login)
 	router.POST("/rate/faculty", middlewares.IsAuth(RateFaculty))

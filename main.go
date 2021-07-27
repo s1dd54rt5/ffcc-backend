@@ -9,6 +9,9 @@ import (
 	"github.com/44t4nk1/ffcc-backend/routes"
 	"github.com/gin-gonic/gin"
 	cors "github.com/itsjamie/gin-cors"
+	"github.com/ulule/limiter/v3"
+	mgin "github.com/ulule/limiter/v3/drivers/middleware/gin"
+	"github.com/ulule/limiter/v3/drivers/store/memory"
 )
 
 var (
@@ -17,6 +20,13 @@ var (
 
 func init() {
 	db.InitialiseDb()
+	rate, err := limiter.NewRateFromFormatted("1-M")
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	store := memory.NewStore()
+	rateLimiter := mgin.NewMiddleware(limiter.New(store, rate))
 	router.Use(
 		cors.Middleware(
 			cors.Config{
@@ -28,6 +38,7 @@ func init() {
 				Credentials:     true,
 				ValidateHeaders: false,
 			}))
+	router.Use(rateLimiter)
 	routes.InitRoutes(router)
 }
 

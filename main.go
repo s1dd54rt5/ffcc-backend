@@ -19,7 +19,7 @@ var (
 func init() {
 	db.InitialiseDb()
 
-	rateLimiter := middlewares.CustomMiddleware()
+	rateLimiter := middlewares.RateLimitMiddleware()
 	router.Use(
 		cors.Middleware(
 			cors.Config{

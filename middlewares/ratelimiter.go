@@ -15,7 +15,7 @@ func RateLimitHandler(c *gin.Context) {
 	c.JSON(http.StatusTooManyRequests, gin.H{"error": true, "message": "Rate Limit reached"})
 }
 
-func CustomMiddleware() gin.HandlerFunc {
+func RateLimitMiddleware() gin.HandlerFunc {
 	rate, err := limiter.NewRateFromFormatted("5-S")
 	if err != nil {
 		fmt.Println("Error!")

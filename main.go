@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"time"
 
@@ -18,15 +20,39 @@ var (
 	router = gin.Default()
 )
 
+func RateLimitHandler(c *gin.Context) {
+	c.JSON(http.StatusTooManyRequests, gin.H{"error": true, "message": "Rate Limit reached"})
+}
+
+func CustomMiddleware(limiter *limiter.Limiter) gin.HandlerFunc {
+	middleware := &mgin.Middleware{
+		Limiter:        limiter,
+		OnError:        mgin.DefaultErrorHandler,
+		OnLimitReached: RateLimitHandler,
+		KeyGetter:      mgin.DefaultKeyGetter,
+		ExcludedKey:    nil,
+	}
+
+	return func(ctx *gin.Context) {
+		middleware.Handle(ctx)
+	}
+}
+
 func init() {
 	db.InitialiseDb()
-	rate, err := limiter.NewRateFromFormatted("1-M")
+	rate, err := limiter.NewRateFromFormatted("5-S")
 	if err != nil {
-		log.Fatal(err)
-		return
+		fmt.Println("Error!")
 	}
+
 	store := memory.NewStore()
-	rateLimiter := mgin.NewMiddleware(limiter.New(store, rate))
+
+	limit := &limiter.Limiter{
+		Rate:  rate,
+		Store: store,
+	}
+
+	rateLimiter := CustomMiddleware(limit)
 	router.Use(
 		cors.Middleware(
 			cors.Config{
